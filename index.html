@@ -1162,6 +1162,24 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   function wait(fn, ms){ return setTimeout(guard(fn), ms); }
   /* короткая вибрация там, где она поддерживается (Android/Chrome); iOS её игнорирует */
   function buzz(ms){ try { if(navigator.vibrate) navigator.vibrate(ms); } catch(e){} }
+  /* ═══ ХАПТИК ═══
+     Отклик по роли элемента: tick — ввод/выбор, tap — обычная кнопка,
+     press — главное действие, warn — предупреждение; draw/fly/land/ready
+     повторяют звуковой таймлайн выдачи карты (см. play()). На iOS Vibration
+     API не поддерживается — там хаптик молча выключен, поведение не меняется. */
+  function rumble(total, on, off){
+    var p = [], t = 0;
+    while(t + on <= total){ p.push(on, off); t += on + off; }
+    return p;
+  }
+  var HAP = {
+    tick:[5], tap:[10], press:[18], warn:[24,70,24],
+    draw:rumble(2000, 9, 41),      // гул, пока рисуется знак
+    fly:rumble(900, 8, 26),        // пролёт знака
+    land:[38],                     // удар-приземление карты
+    ready:[14,60,10,50,26]         // «карта готова»
+  };
+  function haptic(name){ var p = HAP[name]; if(p) buzz(p); }
   var screenEl=$('screen'), field=$('field'), inp=$('phone'), cta=$('cta'),
       rec=$('rec'), recEmo=$('recEmo'), recTxt=$('recTxt'), sub=$('sub'),
       otp=$('otp'), dots=$('dots'), codeSub=$('codeSub'),
@@ -1209,8 +1227,10 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     var prev = S.typed;
     S.typed = Math.max(0, Math.min(TARGET.length, n));
     renderPhone();
+    if(viaUser && S.typed !== prev) haptic('tick');
     if(viaUser && prev < TARGET.length && S.typed === TARGET.length){
       cta.classList.remove('nudge'); void cta.offsetWidth; cta.classList.add('nudge');
+      haptic('press');            // номер набран целиком — акцент на ожившей кнопке
     }
   }
 
@@ -1259,6 +1279,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   otp.addEventListener('input', function(){
     otp.value = otp.value.replace(/\D/g,'').slice(0, CODE_LEN);
     var n = renderCode();
+    haptic(n === CODE_LEN ? 'press' : 'tick');   // тик на цифру, акцент на полном коде
     if(n === CODE_LEN){ otp.blur(); wait(function(){ go('pGate'); }, 380); }
   });
 
@@ -1439,6 +1460,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     }
   };
   function play(name){
+    haptic(name);   // вибро идёт в паре со звуком и живёт даже при sfx:off
     if(S.sfx === 'off') return;
     var ctx = actx(); if(!ctx) return;
     try {
@@ -1499,6 +1521,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
       later(function(){ pCard.classList.remove('field-on'); }, 3060);
       later(function(){ setStatus('Персонализируем карту'); }, 3100);
       later(function(){
+        haptic('tap');            // шит с именем подъехал
         nsheet.classList.add('up');
         wait(function(){ sheetName.focus(); }, 420);
       }, 4400);
@@ -1514,6 +1537,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     if(!pCard.classList.contains('ready')) return;
     var r = card.getBoundingClientRect();
     if(!r.width) return;
+    haptic('tick');               // касание готовой карты
     var px = (e.clientX !== undefined) ? e.clientX : 0,
         py = (e.clientY !== undefined) ? e.clientY : 0;
     var dx = Math.max(-1, Math.min(1, (px - (r.left + r.width/2)) / (r.width/2)));
@@ -1557,7 +1581,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     var b = e.target.closest('b'); if(!b) return;
     var d = TAGDESC[+b.getAttribute('data-i')];
     this.classList.add('tapped');          // подсказка отработала — вздрагивания гасим
-    buzz(10);                              // лёгкий хаптик в ответ на тап
+    /* хаптик тапа приходит из глобального делегата */
     snack.querySelector('b').textContent = d[0];
     snack.querySelector('span').textContent = d[1];
     snack.classList.add('show');
@@ -1722,7 +1746,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
       if(factLock) return;
       var t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
       if(Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.4 && Date.now() - t0 < 700){
-        showFact(); factsAuto();
+        haptic('tick'); showFact(); factsAuto();
       }
     }, {passive:true});
     /* дублируем свайп мышью — для десктопного просмотра прототипа */
@@ -1730,7 +1754,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     sp.addEventListener('mousedown', function(e){ mx = e.clientX; });
     sp.addEventListener('mouseup', function(e){
       if(mx === null || factLock) return;
-      if(Math.abs(e.clientX - mx) > 44){ showFact(); factsAuto(); }
+      if(Math.abs(e.clientX - mx) > 44){ haptic('tick'); showFact(); factsAuto(); }
       mx = null;
     });
   }
@@ -1863,12 +1887,12 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   $('gblur').addEventListener('input', function(){
     var v = parseInt(this.value, 10);
     S.gblur = isNaN(v) ? 24 : Math.max(0, Math.min(40, v));
-    sync();
+    haptic('tick'); sync();
   });
   $('gdropo').addEventListener('input', function(){
     var v = parseInt(this.value, 10);
     S.dropo = isNaN(v) ? 60 : Math.max(0, Math.min(100, v));
-    sync();
+    haptic('tick'); sync();
   });
 
   var atid;
@@ -1885,6 +1909,19 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     applyName(''); S.logo = 'badge-g'; S.clogo = 'clover'; S.known = 'no'; S.gblur = 24; S.dropo = 60; S.theme = 'light'; S.sfx = 'on'; S.react = 'text';
     otp.value = ''; renderCode(); closePanel(); go('pSplash');
   });
+
+  /* Делегированный хаптик на всё кликабельное: сила отклика — по роли элемента.
+     Слушаем в capture-фазе, чтобы сработать и там, где обработчики гасят
+     всплытие (крестик очистки, подсказка «i»). Точечные хаптики выше
+     (ввод, слайдеры, свайпы, таймлайн карты) дополняют этот базовый слой. */
+  var HPRESS = { toAuth:1, cta:1, gateYes:1, nameGo:1, sheetGo:1, toHome:1, sber:1, ya:1 };
+  document.addEventListener('click', function(e){
+    if(!e.target || !e.target.closest) return;
+    var el = e.target.closest('button, #tags b, .rinfo, #snack');
+    if(!el || el.disabled) return;
+    if(el.id === 'gateNo'){ haptic('warn'); return; }   // «Нет» на гейте — предупреждение
+    haptic(HPRESS[el.id] ? 'press' : 'tap');
+  }, true);
 
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closePanel(); } });
 
