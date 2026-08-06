@@ -1160,13 +1160,64 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   var $ = function(id){ return document.getElementById(id); };
   function guard(fn){ return function(){ try { return fn.apply(this, arguments); } catch(e){} }; }
   function wait(fn, ms){ return setTimeout(guard(fn), ms); }
-  /* короткая вибрация там, где она поддерживается (Android/Chrome); iOS её игнорирует */
-  function buzz(ms){ try { if(navigator.vibrate) navigator.vibrate(ms); } catch(e){} }
+  /* ═══ ВИБРАЦИЯ: ДВА ПУТИ ═══
+     Android/Chrome — честный Vibration API, паттерны как есть.
+     iOS Safari — Vibration API нет, но с iOS 17.4 нативный switch-чекбокс
+     даёт системный хаптик-тик при переключении. Держим невидимый
+     <input type="checkbox" switch> и «щёлкаем» его программно: паттерн
+     переводим в серию тиков — по тику на каждый включённый отрезок,
+     длинные отрезки (гул выдачи карты) пульсируем с шагом ~90 мс.
+     Сила тика на iOS одна, поэтому press/tap там ощущаются одинаково —
+     это потолок веб-хаптики без нативной обёртки. */
+  var hswInput = null, hswTimers = [];
+  function hswSetup(){
+    if(hswInput !== null) return hswInput;
+    try {
+      var lab = document.createElement('label');
+      lab.setAttribute('aria-hidden', 'true');
+      /* offscreen, но отрендерен: display:none убил бы хаптик */
+      lab.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;pointer-events:none';
+      var sw = document.createElement('input');
+      sw.type = 'checkbox'; sw.tabIndex = -1;
+      sw.setAttribute('switch', '');
+      lab.appendChild(sw);
+      document.body.appendChild(lab);
+      hswInput = sw;
+    } catch(e){ hswInput = false; }
+    return hswInput;
+  }
+  function hswTick(){ var sw = hswSetup(); if(sw) try { sw.click(); } catch(e){} }
+  function hswPlay(pattern){
+    hswTimers.forEach(clearTimeout); hswTimers = [];
+    var arr = Array.isArray(pattern) ? pattern : [pattern];
+    var at = 0, last = -999, STEP = 90, GAP = 60;
+    for(var i = 0; i < arr.length; i += 2){
+      var on = arr[i] || 0;
+      for(var t = 0; t < Math.max(on, 1); t += STEP){
+        var when = at + t;
+        if(when - last >= GAP){
+          (function(d){
+            if(d === 0){ hswTick(); }          // первый тик — синхронно, внутри жеста
+            else hswTimers.push(setTimeout(hswTick, d));
+          })(when);
+          last = when;
+        }
+        if(on <= STEP) break;
+      }
+      at += on + (arr[i + 1] || 0);
+    }
+  }
+  function buzz(ms){
+    try {
+      if(navigator.vibrate) navigator.vibrate(ms);
+      else hswPlay(ms);
+    } catch(e){}
+  }
   /* ═══ ХАПТИК ═══
      Отклик по роли элемента: tick — ввод/выбор, tap — обычная кнопка,
      press — главное действие, warn — предупреждение; draw/fly/land/ready
-     повторяют звуковой таймлайн выдачи карты (см. play()). На iOS Vibration
-     API не поддерживается — там хаптик молча выключен, поведение не меняется. */
+     повторяют звуковой таймлайн выдачи карты (см. play()). На Android паттерны
+     играет Vibration API, на iOS — фолбэк на switch-чекбокс (см. buzz()). */
   function rumble(total, on, off){
     var p = [], t = 0;
     while(t + on <= total){ p.push(on, off); t += on + off; }
