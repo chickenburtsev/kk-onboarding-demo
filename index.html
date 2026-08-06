@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="auto">
+<html lang="ru" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover,interactive-widget=resizes-content">
@@ -1153,7 +1153,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   var REC_AT = 7;                     // узнавание — с 7-й цифры и до конца
   var CODE_LEN = 5;
 
-  var S = { typed:0, page:'pSplash', flow:'b1', slogo:'text', clogo:'clover', rec:'bubble', logo:'badge-g', known:'no', gblur:24, dropo:60, theme:'auto', sfx:'on', react:'text' };
+  var S = { typed:0, page:'pSplash', flow:'b1', slogo:'text', clogo:'clover', rec:'bubble', logo:'badge-g', known:'no', gblur:24, dropo:60, theme:'light', sfx:'on', react:'text' };
   var NAME_DEFAULT = 'Владислав Ерохин';
 
 
@@ -1882,7 +1882,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   $('replay').addEventListener('click', function(){ closePanel(); go('pCard'); playCard(); });
   $('resetAll').addEventListener('click', function(){
     clearInterval(atid); clearTl(); setTyped(0, false);
-    applyName(''); S.logo = 'badge-g'; S.clogo = 'clover'; S.known = 'no'; S.gblur = 24; S.dropo = 60; S.theme = 'auto'; S.sfx = 'on'; S.react = 'text';
+    applyName(''); S.logo = 'badge-g'; S.clogo = 'clover'; S.known = 'no'; S.gblur = 24; S.dropo = 60; S.theme = 'light'; S.sfx = 'on'; S.react = 'text';
     otp.value = ''; renderCode(); closePanel(); go('pSplash');
   });
 
