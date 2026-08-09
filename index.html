@@ -815,7 +815,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   display:flex;align-items:center;gap:6px;padding:5px 11px 5px 9px;border-radius:999px;
   background:rgba(12,18,8,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   color:#fff;font-size:11.5px;font-weight:600;letter-spacing:-.1px;white-space:nowrap;
-  animation:hintBob 2.4s var(--ease) infinite;pointer-events:none;
+  pointer-events:none;
   transition:opacity .3s var(--ease),transform .3s var(--ease)}
 .pullhint svg{display:block}
 @keyframes hintBob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-5px)}}
@@ -1276,6 +1276,72 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
 
 @keyframes tagpulse{0%{transform:scale(1)}38%{transform:scale(1.055)}100%{transform:scale(1)}}
 .tagline.pulse{animation:tagpulse .5s cubic-bezier(.34,1.56,.64,1) both}
+
+/* ══ Карта лояльности из макета (6624:34128 / 6500:31622): две стороны,
+   переворот вокруг оси X, подъём и блик в момент поворота ══ */
+.card3{width:302px;height:176px;margin:0 auto;position:relative;
+  transform-style:preserve-3d;transition:transform .34s ease-out;will-change:transform}
+.card3.lift{transform:translateZ(28px)}
+.c3in{width:100%;height:100%;position:relative;transform-style:preserve-3d;
+  transform:rotateX(0deg);touch-action:pan-y;cursor:pointer}
+.c3in.anim{transition:transform .62s cubic-bezier(.35,.05,.2,1)}
+.cface{position:absolute;inset:0;border-radius:16px;overflow:hidden;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:radial-gradient(180.79px 176px at 151px 0,#A8E649 0%,#80BA27 100%),#80BA27;
+  box-shadow:0 2px 0 0 #94CE3B,inset 0 2px 0 0 #A5E347,0 12px 26px rgba(38,60,12,.20);
+  color:#fff;display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;padding:12px 24px}
+.cface.back{transform:rotateX(180deg)}
+.cface > svg.pat{position:absolute;top:50%;left:50%;width:303px;height:178px;
+  margin:-89px 0 0 -151.5px;pointer-events:none}
+.cface > .chead,.cface > .cqr,.cface > .cbody,.cface > .cfoot{position:relative}
+.chead{display:flex;align-items:center;justify-content:space-between;width:100%}
+.chead .cl{display:flex;align-items:center;gap:4px;cursor:pointer;
+  margin:-6px -8px -6px -6px;padding:6px 8px 6px 6px}
+.chead .cl,.chead .cr{font-size:16px;line-height:20px;font-weight:600;
+  text-shadow:0 2px 0 rgba(0,0,0,.1);white-space:nowrap}
+.chead svg.chv{width:24px;height:24px;flex:none;display:block}
+.cqr{width:100px;height:96px;background:#fff;border-radius:8px;overflow:hidden;flex:none;
+  display:grid;place-items:center}
+.cqr svg{width:83px;height:83px;display:block}
+.cfoot{display:flex;align-items:center;justify-content:space-between;width:254px;
+  font-size:13px;line-height:16px;text-shadow:0 1px 1px rgba(0,0,0,.1);white-space:nowrap}
+.cfoot .cnm{font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.cfoot .cnum{font-weight:400;color:rgba(255,255,255,.8)}
+.cbody{width:263px;flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:4px;position:relative}
+.cbody .cglow{position:absolute;left:18.5px;top:17px;width:218px;height:61px;
+  background:#87C22D;filter:blur(20px);pointer-events:none}
+.cbrow{display:flex;align-items:center;gap:8px;position:relative}
+.cbal{font-size:34px;line-height:41px;font-weight:700;letter-spacing:.41px;color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,.1);white-space:nowrap;font-variant-numeric:tabular-nums}
+.cbrow svg.kglico{width:32px;height:32px;flex:none;display:block}
+.ctr{position:relative;width:100%;text-align:center;font-size:16px;line-height:20px;
+  font-weight:600;text-shadow:0 2px 0 rgba(0,0,0,.1);cursor:pointer}
+.cglare{position:absolute;top:50%;right:43.8px;width:46px;height:200px;background:#fff;
+  filter:blur(22px);opacity:0;pointer-events:none;
+  transform:translateY(-50%) rotate(15deg) translateX(110px)}
+.card3.sweep .cglare{animation:glareSweep .72s cubic-bezier(.4,0,.35,1)}
+@keyframes glareSweep{
+  0%{opacity:0;transform:translateY(-50%) rotate(15deg) translateX(110px)}
+  18%{opacity:.6}82%{opacity:.6}
+  100%{opacity:0;transform:translateY(-50%) rotate(15deg) translateX(-420px)}}
+
+/* карта в профиле — тот же компонент, по умолчанию открыт баланс */
+.pcardslot{width:302px;margin:-74px auto 0;position:relative;z-index:14;perspective:1500px}
+
+/* шапка профиля поверх фото: круглые полупрозрачные кнопки, а не белые квадраты */
+.pnav .back{width:34px;height:34px;padding:0;border:0;border-radius:50%;cursor:pointer;
+  display:grid;place-items:center;color:#fff;background:rgba(0,0,0,.26);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.28));flex:0 0 auto;-webkit-appearance:none}
+.pnav .back:active{background:rgba(0,0,0,.4)}
+
+/* подсказка «Потяните»: показываем, дважды вздрагиваем и убираем навсегда */
+@keyframes hintNudge{0%,100%{transform:translate(-50%,0)}
+  30%{transform:translate(-50%,7px)}60%{transform:translate(-50%,1px)}}
+.pullhint.nudge{animation:hintNudge .46s cubic-bezier(.34,1.4,.64,1)}
+.pullhint.gone{opacity:0!important;transform:translate(-50%,8px)!important;pointer-events:none}
 </style>
 </head>
 <body>
@@ -1584,7 +1650,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
           </div>
           <div class="pullhint" id="pullHint">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M12 19l6-6M12 19l-6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Потяните вниз — вас ждёт подарок
+            Потяните
           </div>
         </div>
         <div class="hicons">
@@ -1610,18 +1676,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
 
           <div class="hcardwrap" id="hCardWrap">
             <!-- авторизованный -->
-            <div class="hcard authonly" id="hCard">
-              <div class="cpat" id="hPat"></div>
-              <div class="glare"></div>
-              <div class="ctop">
-                <span class="chv"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 14.5 12 8.5l6 6" stroke="#5E9425" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                Баланс
-                <span class="hist">История</span>
-              </div>
-              <div class="qr" id="hQr"></div>
-              <div class="bal"><span class="bnum" id="balNum">103 315</span><span class="blab">КеГЛей на карте</span></div>
-              <div class="cbot"><span class="cnm" id="hCardNm">ВЛАДИСЛАВ</span><span class="cnum">* 343</span></div>
-            </div>
+            <div class="card3 authonly" id="hCard"></div>
             <!-- гость -->
             <div class="gcard guestonly">
               <div class="gi"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M15 3h3.5A1.5 1.5 0 0 1 20 4.5v15a1.5 1.5 0 0 1-1.5 1.5H15" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M10.5 8 14.5 12l-4 4M14 12H4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -1848,18 +1903,18 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
         <div class="pnav">
           <button class="back" data-back="1" style="color:#fff" aria-label="Назад"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <h2>Профиль</h2>
-          <button class="back" id="profBell" style="color:#fff" aria-label="Уведомления"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 0-6 6c0 3.4-.7 5.3-1.5 6.4-.4.6 0 1.6.8 1.6h13.4c.8 0 1.2-1 .8-1.6C18.7 14.3 18 12.4 18 9a6 6 0 0 0-6-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 20a2.6 2.6 0 0 0 5 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <span style="width:34px;flex:0 0 auto"></span>
         </div>
       </div>
-      <div class="pcard">
-        <div class="ppat" id="pPat"></div>
+      <div class="pcardslot"><div class="card3" id="pfCard"></div></div>
+      <div class="pcard" hidden>
         <div class="prow1"><span class="chv" style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9.5 12 15.5l6-6" stroke="#5E9425" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>QR код<span class="hist">История</span></div>
         <div class="pbal"><b>103 315</b><span class="kgl">КеГЛи</span></div>
         <div class="ptr" id="profTransfer">Перевести <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="prow2"><span id="profCardNm">ВЛАДИСЛАВ</span><span class="pnum">* 343</span></div>
       </div>
       <div class="pmenu">
-        <div class="prow" data-p="Профиль пользователя"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.6" r="3.3" stroke="currentColor" stroke-width="1.8"/><path d="M5.4 19.4a6.9 6.9 0 0 1 13.2 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>Иванов Иван Иванович<span class="pchev"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m4 20 10.5-10.5M20 4l-3.5 1L15 8.5 18.5 12l3.5-1.5L20 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></div>
+        <div class="prow" data-p="Профиль пользователя"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.6" r="3.3" stroke="currentColor" stroke-width="1.8"/><path d="M5.4 19.4a6.9 6.9 0 0 1 13.2 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span id="profFullNm">Иванов Иван Иванович</span><span class="pchev"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m4 20 10.5-10.5M20 4l-3.5 1L15 8.5 18.5 12l3.5-1.5L20 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></div>
         <div class="prow" id="profNotif"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 0-6 6c0 3.4-.7 5.3-1.5 6.4-.4.6 0 1.6.8 1.6h13.4c.8 0 1.2-1 .8-1.6C18.7 14.3 18 12.4 18 9a6 6 0 0 0-6-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 20a2.6 2.6 0 0 0 5 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>Уведомления<span class="pchev"><span class="pbdg">5</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
         <div class="prow" data-p="Пригласить друга"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.7"/><path d="M3 19a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M18 7v6M21 10h-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>Пригласить друга<span class="pchev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
         <div class="prow" data-p="Мои карты"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2.6" y="5.6" width="18.8" height="12.8" rx="2.6" stroke="currentColor" stroke-width="1.8"/><path d="M2.6 10h18.8" stroke="currentColor" stroke-width="1.8"/></svg></span>Мои карты<span class="pchev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
@@ -2052,7 +2107,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   var REC_AT = 7;                     // узнавание — с 7-й цифры и до конца
   var CODE_LEN = 5;
 
-  var S = { guest:false, push:false, city:'', typed:0, page:'pSplash', flow:'b1', slogo:'text', clogo:'clover', rec:'bubble', logo:'badge-g', known:'no', gblur:24, dropo:60, theme:'light', sfx:'on', react:'text' };
+  var S = { guest:false, push:false, name:'', city:'', typed:0, page:'pSplash', flow:'b1', slogo:'text', clogo:'clover', rec:'bubble', logo:'badge-g', known:'no', gblur:24, dropo:60, theme:'light', sfx:'on', react:'text' };
   var NAME_DEFAULT = 'Владислав Ерохин';
 
 
@@ -2570,7 +2625,9 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
 
   function applyName(v){
     var full = (v || '').trim();
+    S.name = full;
     cardName.textContent = full;
+    if(typeof syncName === 'function') syncName();
     /* Перенос строго после имени — как в макете: «Владислав,» / «вы в КуулКлевер!».
        Имя подставляем текстовым узлом, а не разметкой, чтобы ввод пользователя
        не попадал в innerHTML. */
@@ -2751,6 +2808,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     if(id === 'pAkcii' || id === 'pProfile' || id === 'pNotif' || id === 'pOrder'){
       markTabs(id); screenEl.classList.toggle('isguest', !!S.guest);
     }
+    if(id === 'pProfile'){ syncName(); profCard.set(true); wait(profCard.sweep, 360); }
     else { clearTl(); }
     if(id === 'pSplash') splashEnter(); else factsStop();
     gateReset();  // и на входе, и на выходе — иначе gateBusy залипает
@@ -2804,9 +2862,10 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     if(gateBusy) return;
     $('alertNo').classList.add('on');
   });
+  /* «Хорошо» просто закрывает модалку — пользователь остаётся на гейте */
   $('alertOk').addEventListener('click', function(){
     $('alertNo').classList.remove('on');
-    wait(function(){ go('pSplash'); }, 180);
+    gateBusy = false;
   });
   $('gateYes').addEventListener('click', function(e){
     if(gateBusy) return;
@@ -2934,6 +2993,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
       hIcons=document.querySelector('#pHome .hicons');
 
   /* QR — детерминированный «шум» с тремя глазками, как на карте в приложении */
+  var QRSVG='';
   (function(){
     var N=29, seed=20260809, r=function(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
     var g=[],x,y;
@@ -2949,12 +3009,12 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     eye(0,0); eye(N-7,0); eye(0,N-7);
     var o='';
     for(y=0;y<N;y++)for(x=0;x<N;x++) if(g[y][x]) o+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
-    $('hQr').innerHTML='<svg viewBox="0 0 '+N+' '+N+'" shape-rendering="crispEdges"><g fill="#1E1E1E">'+o+'</g></svg>';
+    QRSVG='<svg viewBox="0 0 '+N+' '+N+'" shape-rendering="crispEdges"><g fill="#1E1E1E">'+o+'</g></svg>';
   })();
 
   /* клеверный паттерн карты — фирменный знак из макета */
   var KPAT = '<svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" viewBox="0 0 132 132"><defs><g id="k"><path d="M126 74.5C123 74.5 120.8 75 119.4 76C110 83 116.8 128.3 147.5 198.9C197.2 196.4 234.2 184.5 238.5 169.3C242.9 154 220.2 124.3 185.6 100.2C159.4 81.9 137.3 74.5 126 74.5V74.5ZM133.3 221.8L130.3 215C91.4 127.9 83.2 75 106.1 58C126.8 42.6 167.3 60.2 198.3 81.8C252.7 119.7 265.8 155 259.9 175.5C255.4 191.5 233.8 218.8 140.8 221.6L133.3 221.8"/><path d="M151.9 22.3C135.4 22.3 109.9 30.3 82.5 47.8C32.8 79.6 19.3 113.4 22.9 132.7C28.7 164.2 75.8 191.8 133.9 198.5C178.2 109 185.6 39.6 166.5 25.9C163.3 23.5 158.3 22.3 151.9 22.3V22.3ZM146.9 222.2L139.5 221.6C66 215.5 9.1 180.6 1 136.8C-6.7 95 31.9 53.6 70.6 28.9C107 5.5 154.9 -10.1 179.5 7.6C207.5 27.8 209.3 99.9 150.3 215.5L146.9 222.2"/><path d="M60.1 145.5C59 145.5 58.1 145.6 57.3 146C51.8 148.4 43.9 164 43.4 187.3C43 205.2 47.9 228.6 62.7 235.8C78 243.2 106 235.1 127 209.6C99.4 164.5 71.6 145.5 60.1 145.5ZM75.1 260.8C67.2 260.8 59.7 259.2 53 256C32.4 246 20.4 220.1 21.2 186.8C21.7 163.7 29.1 133.8 48.5 125.4C74.6 114.1 116.4 146.7 150.1 204.8L153.7 211L149.5 216.9C130 244.3 100.6 260.8 75.1 260.8"/><path d="M154.8 212.1C175.6 240.7 214.3 251.5 244.9 235.9C277.2 219.5 281.9 183.2 282.5 172.5C283.8 151.4 277.9 137.5 273.2 134.4C262.4 127 220.9 148.4 154.8 212.1V212.1ZM215 265.4C181.6 265.4 148.5 247.3 130.7 216L126.5 208.4L132.7 202.4C208.9 127.7 260.4 98.6 285.7 115.8C298.9 124.8 306.4 147.6 304.8 173.9C302.5 210.5 283.9 241.2 255 255.9C242.3 262.3 228.6 265.4 215 265.4"/><path d="M105.2 419C94.3 384.4 91.7 353.4 95.3 317.5C99.4 277.8 112.7 238.8 133.8 204.8L152.7 216.7C133.4 247.8 121.2 283.4 117.5 319.7C114.2 352.6 118.1 386.7 128.1 418.4L105.2 419Z"/></g></defs><g fill="#ffffff"><use href="#k" transform="translate(34 30) rotate(-12) scale(0.130) translate(-152.5 -209.5)" opacity="1.00"/><use href="#k" transform="translate(166 30) rotate(-12) scale(0.130) translate(-152.5 -209.5)" opacity="1.00"/><use href="#k" transform="translate(34 162) rotate(-12) scale(0.130) translate(-152.5 -209.5)" opacity="1.00"/><use href="#k" transform="translate(166 162) rotate(-12) scale(0.130) translate(-152.5 -209.5)" opacity="1.00"/><use href="#k" transform="translate(99 95) rotate(24) scale(0.106) translate(-152.5 -209.5)" opacity="0.84"/><use href="#k" transform="translate(-33 95) rotate(24) scale(0.106) translate(-152.5 -209.5)" opacity="0.84"/><use href="#k" transform="translate(99 -37) rotate(24) scale(0.106) translate(-152.5 -209.5)" opacity="0.84"/><use href="#k" transform="translate(-33 -37) rotate(24) scale(0.106) translate(-152.5 -209.5)" opacity="0.84"/><use href="#k" transform="translate(105 22) rotate(62) scale(0.070) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(-27 22) rotate(62) scale(0.070) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(105 154) rotate(62) scale(0.070) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(-27 154) rotate(62) scale(0.070) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(24 104) rotate(-48) scale(0.074) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(156 104) rotate(-48) scale(0.074) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(24 -28) rotate(-48) scale(0.074) translate(-152.5 -209.5)" opacity="0.58"/><use href="#k" transform="translate(156 -28) rotate(-48) scale(0.074) translate(-152.5 -209.5)" opacity="0.58"/></g></svg>';
-  $('hPat').style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(KPAT) + '")';
+  /* KPAT остаётся источником знака для аватара ассистента; фон карт — вектор из макета */
 
   /* ── подарок-конверт ──────────────────────────────────────────
      Палец тянет главную вверх, карта остаётся на месте как «карман»,
@@ -3008,14 +3068,17 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
 
   /* жест: перехватываем тягу вверх только в зоне героя и карты и только
      когда список уже вверху — обычный скролл ниже по странице не ломаем */
+  /* Тянуть можно за любое место главной — кроме самой карты (там свой жест
+     переворота) и интерактивных контролов. Скролл ниже первого экрана не ломаем. */
   function inPullZone(el){
     if(!el||!el.closest) return false;
-    if(el.closest('.gmBtn')) return false;          // кнопка копирования — не жест
-    return !!el.closest('#hHero, #hZone, .hicons, .giftmsg');
+    if(el.closest('#hCard, .gmBtn, .add, .fav, .tabbar, .csheet, input, textarea')) return false;
+    return !!el.closest('#hScroll');
   }
   function dragStart(y, el){
     if(hScroll.scrollTop>2) return;
     if(!inPullZone(el)) return;
+    hintHide();
     gDrag={y0:y, d:giftOpen?GIFT_MAX:0, base:giftOpen?GIFT_MAX:0, moved:false, last:0};
   }
   function dragMove(y, ev, isTouch){
@@ -3071,18 +3134,11 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     giftMsg.style.opacity='0';
     if(t>0.85) sweepArmed=true;
     if(t<0.06 && sweepArmed){                 // вернулись наверх — по карте бежит блик
-      sweepArmed=false; hCard.classList.remove('sweep'); void hCard.offsetWidth;
-      hCard.classList.add('sweep'); haptic('tick');
+      sweepArmed=false; homeCard.sweep(); haptic('tick');
     }
     if(Math.abs(t-lastT)>0.34){ lastT=t; }
   }, {passive:true});
 
-  /* ── карта: тап переворачивает QR ↔ баланс ── */
-  hCard.addEventListener('click', function(){
-    if(giftOpen) return;
-    hCard.classList.toggle('flip');
-    hCard.classList.remove('sweep'); void hCard.offsetWidth; hCard.classList.add('sweep');
-  });
 
   /* ── копирование промокода ── */
   var PROMO='23ГОДА';
@@ -3106,13 +3162,40 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     }catch(e){ ok(); }
   });
 
+
+  /* Подсказка живёт недолго: появляется, дважды вздрагивает вместе с хаптикой
+     и исчезает насовсем — экран не должен носить её вечно. */
+  var hintTs = [], hintDone = false;
+  function hintStop(){
+    for(var i=0;i<hintTs.length;i++) clearTimeout(hintTs[i]);
+    hintTs = [];
+  }
+  function hintHide(){
+    hintStop(); hintDone = true;
+    var h = $('pullHint'); if(h){ h.classList.remove('nudge'); h.classList.add('gone'); }
+  }
+  function hintRun(){
+    var h = $('pullHint'); if(!h) return;
+    hintStop();
+    h.classList.remove('gone','nudge');
+    if(hintDone){ h.classList.add('gone'); return; }
+    function nudge(){
+      if(S.page !== 'pHome' || giftOpen) return;
+      h.classList.remove('nudge'); void h.offsetWidth; h.classList.add('nudge');
+      haptic('tap');
+    }
+    hintTs.push(wait(nudge, 1400));
+    hintTs.push(wait(nudge, 2150));
+    hintTs.push(wait(hintHide, 3300));
+  }
+
   /* ── вход на главную / выход ── */
   function enterHome(){
     pHome.classList.toggle('guest', !!S.guest);
     pHome.classList.remove('scrolled','giftopen');
     giftOpen=false; gDrag=null; sweepArmed=false;
     hScroll.scrollTop=0;
-    hCard.classList.remove('flip');
+    homeCard.set(false); profCard.set(true);
     hCardWrap.style.opacity='1'; hCardWrap.style.transform='none';
     hHero.style.transition='none'; hHero.style.height=HERO_H+'px'; hHero.style.filter='none';
     heroImg.style.transform='none';
@@ -3124,11 +3207,12 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     $('tabProfBdg').textContent = S.guest ? '1' : '2';
     $('gmCopy').textContent  = S.guest ? 'Войти и забрать' : 'Скопировать промокод';
     $('gmCopy').classList.remove('done');
-    var nm=(cardName.textContent||'').trim().split(/\s+/)[0];
-    $('hCardNm').textContent = (nm || 'Владислав').toUpperCase();
+    var nm=(S.name||'').trim().split(/\s+/)[0];
+    syncName();
     $('miniSub').textContent = S.guest ? 'Гостевой режим' : (nm ? nm+', ваша карта' : 'Карта Клуба Друзей');
     $('miniBal').textContent = S.guest ? 'Войдите в Клуб' : '103 315 КеГЛей';
-    wait(function(){ hCard.classList.remove('sweep'); void hCard.offsetWidth; hCard.classList.add('sweep'); },420);
+    wait(function(){ homeCard.sweep(); },420);
+    hintRun();
     /* один раз за сессию: гео → выбор города → предложение пушей */
     if(!S.guest && !S.city) wait(function(){
       askGeo(function(){ wait(openCity, 340); });
@@ -3222,9 +3306,121 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   /* фирменный знак «КуулКлевер» — один источник правды для аватара и прочих мест */
   var KMARK = '<svg viewBox="0 0 305 419" width="15" height="20" fill="#fff" aria-hidden="true">'
     + KPAT.slice(KPAT.indexOf('<g id="k">') + 10, KPAT.indexOf('</g></defs>')) + '</svg>';
-  $('pPat').style.backgroundImage = $('hPat').style.backgroundImage;
   $('profHero').src = IMGS.hero;
   $('wallImg').src = IMGS.st2;
+
+
+  /* ══ Карта лояльности: сборка обеих сторон и переворот (макет kuulklevercard) ══ */
+  var CHV_UP = '<svg class="chv" viewBox="0 0 24 24" fill="none"><path d="M7 14.5 12 9.5l5 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var CHV_DN = '<svg class="chv" viewBox="0 0 24 24" fill="none"><path d="M7 9.5 12 14.5l5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var KGL_ICON = "<svg class=\"kglico\" viewBox=\"0 0 32 32\" fill=\"none\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M24.6731 4.53747C23.1507 4.33329 21.2053 4.33331 18.7486 4.33333H13.2518C10.7951 4.33331 8.84965 4.33329 7.32725 4.53747C5.76085 4.74754 4.49325 5.19007 3.49339 6.18744C2.12065 7.55677 1.787 9.44246 1.68183 11.944L1.68047 11.9762C1.59243 15.4484 1.61631 17.1255 1.68047 20.0238L1.68183 20.056C1.787 22.5575 2.12065 24.4432 3.49339 25.8126C4.49325 26.8099 5.76085 27.2525 7.32725 27.4625C8.84965 27.6667 10.7951 27.6667 13.2518 27.6667H18.7486C21.2053 27.6667 23.1507 27.6667 24.6731 27.4625C26.2395 27.2525 27.5071 26.8099 28.507 25.8126C29.8797 24.4432 30.2134 22.5575 30.3185 20.056C30.3939 17.1012 30.415 15.3046 30.3185 11.944C30.2134 9.44246 29.8797 7.55677 28.507 6.18744C27.5071 5.19007 26.2395 4.74754 24.6731 4.53747ZM27.0945 24.3966C27.8782 23.6148 28.2162 22.4467 28.3203 19.972C28.39 17.0943 28.4082 15.4138 28.3203 12.028C28.2162 9.55325 27.8782 8.38518 27.0945 7.60342C26.5284 7.03869 25.7528 6.70017 24.4073 6.51972C23.0332 6.33545 21.2221 6.33333 18.6735 6.33333H13.3269C10.7782 6.33333 8.96713 6.33545 7.59309 6.51972C6.24757 6.70017 5.47197 7.03869 4.90584 7.60342C4.12213 8.38518 3.7841 9.55325 3.68006 12.028C3.58068 14.9423 3.59781 16.7048 3.68006 19.972C3.7841 22.4467 4.12213 23.6148 4.90584 24.3966C5.47197 24.9613 6.24757 25.2998 7.59309 25.4803C8.96713 25.6646 10.7782 25.6667 13.3269 25.6667H18.6735C21.2221 25.6667 23.0332 25.6646 24.4073 25.4803C25.7528 25.2998 26.5284 24.9613 27.0945 24.3966Z\" fill=\"white\"/><path d=\"M8.93942 19.9946C8.34718 19.9946 8 19.6237 8 18.9677V13.0269C8 12.371 8.34718 12 8.93942 12C9.53166 12 9.87374 12.371 9.87374 13.0269V15.2527H9.91458L12.4725 12.4731C12.8145 12.0914 12.9728 12 13.2536 12C13.6978 12 14.0654 12.3387 14.0654 12.7581C14.0654 13.0215 13.9837 13.2097 13.7744 13.4247L11.5535 15.7742L13.8969 18.3978C14.1113 18.6452 14.1777 18.7957 14.1777 19.0538C14.1777 19.6022 13.8152 19.9946 13.3047 19.9946C12.9677 19.9946 12.7788 19.8871 12.4316 19.4839L9.91458 16.6559H9.87374V18.9677C9.87374 19.6237 9.53166 19.9946 8.93942 19.9946Z\" fill=\"white\"/><path d=\"M15.4184 20C14.8516 20 14.5147 19.6452 14.5147 19.0269V15.0538C14.5147 14.3978 14.8568 14.0215 15.449 14.0215H17.9916C18.3387 14.0215 18.64 14.2796 18.64 14.7258C18.64 15.172 18.3387 15.4301 17.9916 15.4301H16.322V19.0269C16.322 19.6452 15.9851 20 15.4184 20Z\" fill=\"white\"/><path d=\"M19.3394 19.9355C18.6655 19.9355 18.2264 19.5699 18.2264 19.0054C18.2264 18.5914 18.497 18.3118 18.8901 18.3118H18.9055C19.4568 18.3118 19.6815 17.9194 19.7274 16.7957L19.8959 13.1505C19.9215 12.4892 20.238 12.1183 20.8302 12.1183H24.3939C24.9913 12.1183 25.3333 12.4946 25.3333 13.1505V18.9677C25.3333 19.6237 24.9913 19.9946 24.3939 19.9946C23.8017 19.9946 23.4596 19.6237 23.4596 18.9677V13.7043H21.6012L21.4531 16.7258C21.351 18.828 20.6924 19.9355 19.3394 19.9355Z\" fill=\"white\"/></svg>";
+
+  /* клевер на карте — тот же вектор из Фигмы, что на экране выдачи; клонируем,
+     переименовывая id маски, чтобы копии не спорили друг с другом */
+  var cloneN = 0;
+  function cloverSvg(){
+    var src = document.querySelector('#pCard .card svg.pat');
+    if(!src) return null;
+    cloneN++;
+    var box = document.createElement('div');
+    box.innerHTML = src.outerHTML.replace(/_6512_36190/g, '_kk' + cloneN);
+    return box.firstChild;
+  }
+
+  function buildCard(root){
+    root.innerHTML =
+      '<div class="c3in">' +
+        '<div class="cface front">' +
+          '<div class="chead"><div class="cl" data-flip="back">' + CHV_UP +
+            '<span>Баланс</span></div><div class="cr" data-stub="История">История</div></div>' +
+          '<div class="cqr">' + QRSVG + '</div>' +
+          '<div class="cfoot"><span class="cnm" data-cnm>ВЛАДИСЛАВ</span>' +
+            '<span class="cnum">* 343</span></div>' +
+          '<div class="cglare"></div>' +
+        '</div>' +
+        '<div class="cface back">' +
+          '<div class="chead"><div class="cl" data-flip="front">' + CHV_DN +
+            '<span>QR код</span></div><div class="cr" data-stub="История">История</div></div>' +
+          '<div class="cbody"><div class="cglow"></div>' +
+            '<div class="cbrow"><span class="cbal" data-cbal>103 315</span>' + KGL_ICON + '</div>' +
+            '<div class="ctr" data-stub="Перевод КеГЛей">Перевести →</div></div>' +
+          '<div class="cfoot"><span class="cnm" data-cnm>ВЛАДИСЛАВ</span>' +
+            '<span class="cnum">* 343</span></div>' +
+          '<div class="cglare"></div>' +
+        '</div>' +
+      '</div>';
+    var faces = root.querySelectorAll('.cface');
+    for(var i=0;i<faces.length;i++){
+      var cl = cloverSvg();
+      if(cl) faces[i].insertBefore(cl, faces[i].firstChild);
+    }
+    return bindCard3(root);
+  }
+
+  function bindCard3(root){
+    var inn = root.querySelector('.c3in');
+    var api = { flipped:false, busy:false };
+    api.flip = function(to){
+      var next = (to === undefined) ? !api.flipped : !!to;
+      if(api.busy || next === api.flipped) return;
+      api.flipped = next; api.busy = true;
+      inn.classList.add('anim');
+      inn.style.transform = 'rotateX(' + (next ? -180 : 0) + 'deg)';
+      root.classList.add('lift');
+      wait(function(){ root.classList.remove('lift'); }, 260);
+      root.classList.remove('sweep'); void root.offsetWidth; root.classList.add('sweep');
+      wait(function(){ root.classList.remove('sweep'); }, 760);
+      haptic('press');
+    };
+    api.set = function(v){
+      api.flipped = !!v; api.busy = false;
+      inn.classList.remove('anim');
+      inn.style.transform = 'rotateX(' + (v ? -180 : 0) + 'deg)';
+    };
+    api.sweep = function(){
+      root.classList.remove('sweep'); void root.offsetWidth; root.classList.add('sweep');
+      wait(function(){ root.classList.remove('sweep'); }, 760);
+    };
+    inn.addEventListener('transitionend', function(e){
+      if(e.propertyName === 'transform') api.busy = false;
+    });
+    root.addEventListener('click', function(e){
+      var t = e.target.closest && e.target.closest('[data-flip]');
+      if(t){ e.stopPropagation(); api.flip(t.getAttribute('data-flip') === 'back'); return; }
+      var st = e.target.closest && e.target.closest('[data-stub]');
+      if(st){ e.stopPropagation(); toast(st.getAttribute('data-stub') + ' — заглушка прототипа'); }
+    });
+    /* свайп по карте: вверх — на баланс, вниз — обратно на QR */
+    var cy = null;
+    root.addEventListener('pointerdown', function(e){ cy = e.clientY; });
+    root.addEventListener('pointerup', function(e){
+      if(cy === null) return;
+      var dy = e.clientY - cy; cy = null;
+      if(Math.abs(dy) < 26) return;
+      api.flip(dy < 0);
+    });
+    root.addEventListener('pointercancel', function(){ cy = null; });
+    return api;
+  }
+
+  var homeCard = buildCard($('hCard'));
+  var profCard = buildCard($('pfCard'));
+  profCard.set(true);                       // в профиле по умолчанию баланс
+
+  /* ══ имя из выдачи карты — во всех местах приложения ══ */
+  function syncName(){
+    var full = (S.name || '').trim();
+    var first = full.split(/\s+/)[0] || '';
+    var up = (first || 'Владислав').toUpperCase();
+    var q = document.querySelectorAll('[data-cnm]');
+    for(var i=0;i<q.length;i++) q[i].textContent = up;
+    var pf = $('profFullNm');
+    if(pf) pf.textContent = full || 'Иванов Иван Иванович';
+    var mn = $('miniSub');
+    if(mn && S.page === 'pHome')
+      mn.textContent = S.guest ? 'Гостевой режим' : (first ? first + ', ваша карта' : 'Карта Клуба Друзей');
+    if(first && !CD.name) CD.name = first;
+  }
 
   /* ══════════ ВЕТКИ: навигация, уведомления, чат, профиль, акции, разрешения ══════════ */
   var navStack=[];
@@ -3332,7 +3528,6 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
 
   /* ── уведомления ── */
   $('hBell').addEventListener('click', function(){ goSub('pNotif'); });
-  $('profBell').addEventListener('click', function(){ goSub('pNotif'); });
   $('profNotif').addEventListener('click', function(){ goSub('pNotif'); });
   $('nrowChat').addEventListener('click', function(){
     var b=this.querySelector('.nbdg'); if(b) b.style.display='none';
