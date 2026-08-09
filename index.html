@@ -1008,6 +1008,69 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
 @keyframes conf{0%{opacity:1;transform:translate(0,0) rotate(0)}
   100%{opacity:0;transform:translate(var(--cx),var(--cy)) rotate(var(--cr))}}
 
+
+/* ══ Правки по макету Figma «App Talk 26» ══ */
+/* карта: «Баланс/История» сверху, имя и номер снизу — как в макете */
+.hcard .ctop{position:absolute;top:0;left:0;right:0;height:36px;display:flex;align-items:center;
+  padding:0 13px;gap:7px;font-size:13.5px;font-weight:700;letter-spacing:-.2px;z-index:2}
+.hcard .ctop .chv{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.94);
+  display:grid;place-items:center;flex:0 0 auto}
+.hcard .ctop .hist{margin-left:auto;font-weight:600;opacity:.95}
+.hcard .cbot{position:absolute;left:0;right:0;bottom:0;height:30px;display:flex;align-items:center;
+  padding:0 14px;font-size:11px;font-weight:700;letter-spacing:.7px;z-index:2}
+.hcard .cbot .cnum{margin-left:auto;font-variant-numeric:tabular-nums}
+.hcard .qr{top:40px;width:104px;height:104px;padding:7px;border-radius:8px}
+.hcard .bal{top:36px;bottom:30px;inset-inline:0;height:auto}
+
+/* боттом-шит выбора города */
+.csheet{position:absolute;inset:0;z-index:44;display:none}
+.csheet.up{display:block}
+.csheet .csbg{position:absolute;inset:0;background:rgba(12,18,8,.42);opacity:0;
+  transition:opacity .34s var(--ease)}
+.csheet.in .csbg{opacity:1}
+.csheet .csbox{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;
+  padding:16px 16px calc(18px + env(safe-area-inset-bottom));transform:translateY(102%);
+  transition:transform .42s cubic-bezier(.2,.9,.25,1.06);box-shadow:0 -10px 40px rgba(0,0,0,.18)}
+.csheet.in .csbox{transform:none}
+.csheet .csh{display:flex;align-items:center;margin-bottom:6px}
+.csheet .csh b{flex:1;text-align:center;font-size:16.5px;font-weight:700;letter-spacing:-.3px;
+  padding-left:30px}
+.csheet .csx{width:30px;height:30px;border:0;border-radius:50%;background:#F1F1F2;color:var(--mut);
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.crow{display:flex;align-items:center;gap:11px;padding:13px 2px;cursor:pointer;
+  border-bottom:1px solid var(--hair)}
+.crow:last-of-type{border-bottom:0}
+.crow input{position:absolute;opacity:0;pointer-events:none}
+.crow .cdot{width:21px;height:21px;border-radius:50%;border:2px solid #C9C9CE;flex:0 0 auto;
+  display:grid;place-items:center;transition:border-color .18s var(--ease)}
+.crow .cdot::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--brand);
+  transform:scale(0);transition:transform .18s var(--spring)}
+.crow input:checked ~ .cdot{border-color:var(--brand)}
+.crow input:checked ~ .cdot::after{transform:scale(1)}
+.crow b{font-size:14.5px;font-weight:600;letter-spacing:-.2px}
+.crow i{margin-left:auto;font-style:normal;font-size:12px;color:var(--mut);font-weight:500}
+.csheet .csgo{width:100%;height:50px;margin-top:14px;border:0;border-radius:13px;background:var(--brand);
+  color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.csheet .csgo:active{transform:scale(.985)}
+
+/* экран-гейт «Необходимо войти» */
+#pNeed{color:#fff;position:relative;
+  background:linear-gradient(177deg,#82AD3D 0%,#5C7F2B 13%,#3A4A22 33%,#242B1D 58%,#191B16 100%)}
+#pNeed::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.16) 1.15px,transparent 1.15px);
+  background-size:19px 19px}
+#pNeed .sb{color:#fff}
+.needbody{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 20px calc(26px + env(safe-area-inset-bottom))}
+.needbody h2{font-size:29px;font-weight:800;letter-spacing:-.7px;text-align:center;margin:0 0 10px}
+.needbody p{font-size:14.5px;line-height:1.34;text-align:center;opacity:.88;margin:0 0 26px;
+  padding:0 6px;font-weight:500}
+.needbody button{width:100%;height:52px;border:0;border-radius:14px;font-family:inherit;
+  font-size:16px;font-weight:700;cursor:pointer;transition:transform .12s var(--ease)}
+.needbody button:active{transform:scale(.985)}
+.needbody .nskip{background:#fff;color:#1D1D1F;margin-bottom:11px}
+.needbody .ngo{background:var(--brand);color:#fff}
+
 </style>
 </head>
 <body>
@@ -1339,13 +1402,14 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
             <div class="hcard authonly" id="hCard">
               <div class="cpat" id="hPat"></div>
               <div class="glare"></div>
-              <div class="qr" id="hQr"></div>
-              <div class="bal"><span class="bnum" id="balNum">103 315</span><span class="blab">КеГЛей на карте</span></div>
-              <div class="cbar">
-                <span class="chv"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 14.5 12 8.5l6 6" stroke="#5E9425" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                Баланс КеГЛей
+              <div class="ctop">
+                <span class="chv"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 14.5 12 8.5l6 6" stroke="#5E9425" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                Баланс
                 <span class="hist">История</span>
               </div>
+              <div class="qr" id="hQr"></div>
+              <div class="bal"><span class="bnum" id="balNum">103 315</span><span class="blab">КеГЛей на карте</span></div>
+              <div class="cbot"><span class="cnm" id="hCardNm">ВЛАДИСЛАВ</span><span class="cnum">* 343</span></div>
             </div>
             <!-- гость -->
             <div class="gcard guestonly">
@@ -1462,6 +1526,18 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
       </div>
     </div>
 
+    <div class="csheet" id="cSheet" role="dialog" aria-label="Выбор города">
+      <div class="csbg" id="cSheetBg"></div>
+      <div class="csbox">
+        <div class="csh"><b>Подскажите, где вы?</b>
+          <button class="csx" id="cSheetX" aria-label="Закрыть"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <label class="crow"><input type="radio" name="kkcity" value="Москва и область" checked><span class="cdot"></span><b>Москва и область</b><i>218 магазинов</i></label>
+        <label class="crow"><input type="radio" name="kkcity" value="Нижний Новгород и область"><span class="cdot"></span><b>Нижний Новгород и область</b><i>56 магазинов</i></label>
+        <button class="csgo" id="cSheetGo">Выбрать адрес</button>
+      </div>
+    </div>
+
     <div class="confetti" id="hConf" aria-hidden="true"></div>
 
     <nav class="tabbar" id="hTabs">
@@ -1471,6 +1547,18 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
       <button class="tab" data-t="Корзина"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3.5 5h2.2l2.4 10.2h9.6L19.8 8H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19.4" r="1.5" fill="currentColor"/><circle cx="17" cy="19.4" r="1.5" fill="currentColor"/></svg><span id="tabCart">185,90 ₽</span><span class="bdg cart">1</span></button>
       <button class="tab" data-t="Профиль"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 19.4a7.2 7.2 0 0 1 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span id="tabProf">Профиль</span></button>
     </nav>
+  </div>
+
+
+  <!-- ═══ 6. ГЕЙТ «НЕОБХОДИМО ВОЙТИ» (по макету Figma) ═══ -->
+  <div class="page" id="pNeed">
+    <div class="sb"><span class="t">9:41</span><span class="r"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" width="3" height="12" rx="1"/></svg><svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 11.2 6.1 8.7a3.4 3.4 0 0 1 4.8 0zM3.6 6.2 2 4.5a9.2 9.2 0 0 1 13 0l-1.6 1.7a6.9 6.9 0 0 0-9.8 0zM5.2 7.8 3.8 6.4a7 7 0 0 1 9.4 0l-1.4 1.4a5 5 0 0 0-6.6 0z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.2" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2.1 2.1 0 0 0 0-4z" fill="currentColor" opacity=".45"/></svg></span></div>
+    <div class="needbody">
+      <h2>Необходимо войти</h2>
+      <p>Получайте скидки, подарки, участвуйте в акциях с Клубом друзей КуулКлевер</p>
+      <button class="nskip" id="needSkip">Продолжить без входа</button>
+      <button class="ngo" id="needGo">Войти</button>
+    </div>
   </div>
 
   <button class="ttrigger" id="ttrigger" aria-label="Открыть панель тестировщика" title="Панель тестировщика"></button>
@@ -1486,7 +1574,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     <div class="tbody">
       <div class="grp"><span>Экран</span><div class="seg" data-set="go">
         <button data-v="pSplash">Сплэш</button><button data-v="pAuth">Вход</button>
-        <button data-v="pCode">Код</button><button data-v="pGate">18+</button><button data-v="pName">Имя</button><button data-v="pCard">Карта</button><button data-v="pHome">Главная</button>
+        <button data-v="pCode">Код</button><button data-v="pGate">18+</button><button data-v="pName">Имя</button><button data-v="pCard">Карта</button><button data-v="pNeed">Войти?</button><button data-v="pHome">Главная</button>
       </div></div>
 
       <div class="grp"><span>Тема</span><div class="seg" data-set="theme">
@@ -1570,7 +1658,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   var REC_AT = 7;                     // узнавание — с 7-й цифры и до конца
   var CODE_LEN = 5;
 
-  var S = { guest:false, typed:0, page:'pSplash', flow:'b1', slogo:'text', clogo:'clover', rec:'bubble', logo:'badge-g', known:'no', gblur:24, dropo:60, theme:'light', sfx:'on', react:'text' };
+  var S = { guest:false, city:'', typed:0, page:'pSplash', flow:'b1', slogo:'text', clogo:'clover', rec:'bubble', logo:'badge-g', known:'no', gblur:24, dropo:60, theme:'light', sfx:'on', react:'text' };
   var NAME_DEFAULT = 'Владислав Ерохин';
 
 
@@ -2404,7 +2492,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   $('replay').addEventListener('click', function(){ closePanel(); go('pCard'); playCard(); });
   $('resetAll').addEventListener('click', function(){
     clearInterval(atid); clearTl(); setTyped(0, false);
-    applyName(''); S.logo = 'badge-g'; S.clogo = 'clover'; S.known = 'no'; S.gblur = 24; S.dropo = 60; S.theme = 'light'; S.sfx = 'on'; S.react = 'text';
+    applyName(''); S.logo = 'badge-g'; S.clogo = 'clover'; S.known = 'no'; S.gblur = 24; S.dropo = 60; S.theme = 'light'; S.guest = false; S.city = ''; S.sfx = 'on'; S.react = 'text';
     otp.value = ''; renderCode(); closePanel(); go('pSplash');
   });
 
@@ -2610,7 +2698,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   /* ── копирование промокода ── */
   var PROMO='23ГОДА';
   $('gCopy').addEventListener('click', function(){
-    if(S.guest){ closeHome(); go('pAuth'); return; }
+    if(S.guest){ closeHome(); go('pNeed'); return; }
     var ok=function(){
       var b=$('gCopy'); b.textContent='Скопировано ✓'; b.classList.add('done');
       haptic('press');
@@ -2643,19 +2731,48 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     $('gCopy').textContent   = S.guest ? 'Войти' : 'Скопировать';
     $('gCopy').classList.remove('done');
     var nm=(cardName.textContent||'').trim().split(/\s+/)[0];
+    $('hCardNm').textContent = (nm || 'Владислав').toUpperCase();
     $('miniSub').textContent = S.guest ? 'Гостевой режим' : (nm ? nm+', ваша карта' : 'Карта Клуба Друзей');
     $('miniBal').textContent = S.guest ? 'Войдите в Клуб' : '103 315 КеГЛей';
     wait(function(){ hCard.classList.remove('sweep'); void hCard.offsetWidth; hCard.classList.add('sweep'); },420);
+    /* город спрашиваем один раз за сессию и только у авторизованного */
+    if(!S.guest && !S.city) wait(openCity, 900);
   }
+
+  /* ── «Подскажите, где вы?» — боттом-шит из макета ── */
+  var cSheet=$('cSheet');
+  function openCity(){
+    if(S.page!=='pHome' || S.guest) return;
+    cSheet.classList.add('up'); void cSheet.offsetWidth; cSheet.classList.add('in'); haptic('tap');
+  }
+  function closeCity(){
+    cSheet.classList.remove('in');
+    wait(function(){ cSheet.classList.remove('up'); }, 420);
+  }
+  $('cSheetX').addEventListener('click', closeCity);
+  $('cSheetBg').addEventListener('click', closeCity);
+  document.querySelectorAll('#cSheet .crow input').forEach(function(r){
+    r.addEventListener('change', function(){ haptic('tick'); });
+  });
+  $('cSheetGo').addEventListener('click', function(){
+    var r=document.querySelector('#cSheet .crow input:checked');
+    S.city = r ? r.value : 'Москва и область';
+    closeCity(); haptic('press');
+    wait(function(){ toast(S.city + ' — выбор адреса магазина, заглушка прототипа'); }, 260);
+  });
+
+  /* ── гейт «Необходимо войти» ── */
+  $('needGo').addEventListener('click',   function(){ go('pAuth'); });
+  $('needSkip').addEventListener('click', function(){ S.guest = true; go('pHome'); });
   function closeHome(){ giftOpen=false; gDrag=null; }
 
   $('miniShow').addEventListener('click', function(){
     hScroll.scrollTo({top:0,behavior:'smooth'});
   });
-  $('guestJoin').addEventListener('click', function(){ closeHome(); go('pAuth'); });
-  $('guestJoin2').addEventListener('click', function(){ closeHome(); go('pAuth'); });
+  $('guestJoin').addEventListener('click', function(){ closeHome(); go('pNeed'); });
+  $('guestJoin2').addEventListener('click', function(){ closeHome(); go('pNeed'); });
   $('hProf').addEventListener('click', function(){
-    if(S.guest){ closeHome(); go('pAuth'); } else toast('Профиль — заглушка прототипа');
+    if(S.guest){ closeHome(); go('pNeed'); } else toast('Профиль — заглушка прототипа');
   });
   $('hBell').addEventListener('click', function(){ toast('Уведомления — заглушка прототипа'); });
   $('hPlus').addEventListener('click', function(){ toast('Ещё сервисы — заглушка прототипа'); });
@@ -2681,7 +2798,7 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     b.addEventListener('click', function(){
       var t=b.getAttribute('data-t');
       if(t==='Главная'){ hScroll.scrollTo({top:0,behavior:'smooth'}); return; }
-      if(t==='Профиль' && S.guest){ closeHome(); go('pAuth'); return; }
+      if(t==='Профиль' && S.guest){ closeHome(); go('pNeed'); return; }
       document.querySelectorAll('#pHome .tab').forEach(function(x){ x.classList.remove('on'); });
       b.classList.add('on');
       toast(t+' — заглушка прототипа');
