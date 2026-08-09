@@ -18,6 +18,7 @@
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 149 149'%3E%3Crect width='149' height='149' rx='74.5' fill='%2380BA27'/%3E%3Cpath d='M74.31 28.59c-5 0-12.77 2.42-21.07 7.72C38.14 45.97 34.04 56.24 35.12 62.1c1.76 9.56 16.07 17.94 33.74 19.97 13.45-27.18 15.69-48.25 9.9-52.41-.98-.7-2.5-1.07-4.45-1.07M46.44 65.96c-.34 0-.62.05-.86.16-1.67.72-4.07 5.48-4.22 12.55-.12 5.42 1.35 12.53 5.86 14.72 4.66 2.26 13.15-.22 19.53-7.95-8.39-13.69-16.82-19.48-20.31-19.48M75.19 86.19c6.32 8.69 18.09 11.95 27.39 7.22 9.8-4.98 11.22-16 11.43-19.25.4-6.38-1.41-10.6-2.83-11.56-3.28-2.23-15.89 4.27-36 23.59M66.45 44.41c-.91 0-1.59.16-2 .46-2.87 2.14-.79 15.87 8.55 37.32 15.09-.76 26.32-4.38 27.64-9 1.33-4.64-5.58-13.65-16.07-20.96-7.97-5.56-14.68-7.82-18.12-7.82M60.14 149c-3.34-10.5-4.11-19.9-3-30.82 1.22-12.06 5.27-23.89 11.7-34.21l5.74 3.61c-5.88 9.45-9.58 20.27-10.7 31.29-1.01 9.99.18 20.33 3.23 39.94z' fill='white'/%3E%3C/svg%3E">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
   --bg:#fff; --surface2:#fff; --inputbg:#f2f2f4;
@@ -1230,7 +1231,36 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
     land:[38],                     // удар-приземление карты
     ready:[14,60,10,50,26]         // «карта готова»
   };
-  function haptic(name){ var p = HAP[name]; if(p) buzz(p); }
+  /* Внутри Telegram Mini App хаптика идёт через нативный HapticFeedback —
+     на iOS это единственный путь к полной палитре (light/medium/heavy,
+     success/warning). Снаружи Telegram — buzz(): Vibration API либо switch-хак. */
+  function tgH(){
+    var w = window.Telegram && window.Telegram.WebApp;
+    return (w && w.HapticFeedback && w.platform && w.platform !== 'unknown') ? w.HapticFeedback : null;
+  }
+  var tgTimers = [];
+  function haptic(name){
+    var hf = tgH();
+    if(!hf){ var p = HAP[name]; if(p) buzz(p); return; }
+    try {
+      tgTimers.forEach(clearTimeout); tgTimers = [];
+      if(name === 'tick')       hf.selectionChanged();
+      else if(name === 'tap')   hf.impactOccurred('light');
+      else if(name === 'press') hf.impactOccurred('medium');
+      else if(name === 'warn')  hf.notificationOccurred('warning');
+      else if(name === 'land')  hf.impactOccurred('heavy');
+      else if(name === 'ready') hf.notificationOccurred('success');
+      else if(name === 'draw' || name === 'fly'){
+        /* длинный гул набираем серией мягких импактов */
+        var n = (name === 'draw') ? 16 : 8, step = (name === 'draw') ? 120 : 105;
+        for(var i = 0; i < n; i++){
+          tgTimers.push(setTimeout(function(){
+            var h = tgH(); if(h) try { h.impactOccurred('soft'); } catch(e){}
+          }, i * step));
+        }
+      }
+    } catch(e){}
+  }
   var screenEl=$('screen'), field=$('field'), inp=$('phone'), cta=$('cta'),
       rec=$('rec'), recEmo=$('recEmo'), recTxt=$('recTxt'), sub=$('sub'),
       otp=$('otp'), dots=$('dots'), codeSub=$('codeSub'),
@@ -1975,6 +2005,17 @@ h1{margin:26px 0 0;font-size:26px;line-height:1.2;font-weight:700;letter-spacing
   }, true);
 
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closePanel(); } });
+
+  /* Внутри Telegram: сообщаем готовность, разворачиваем на весь экран и
+     глушим вертикальные свайпы-жесты Telegram, чтобы не спорили с прототипом */
+  try {
+    var tw = window.Telegram && window.Telegram.WebApp;
+    if(tw && tw.platform && tw.platform !== 'unknown'){
+      tw.ready();
+      if(tw.expand) tw.expand();
+      if(tw.disableVerticalSwipes) tw.disableVerticalSwipes();
+    }
+  } catch(e){}
 
   initFacts(); splashEnter();
   renderPhone(); renderCode(); sync();
